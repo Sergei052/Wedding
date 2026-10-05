@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свадьбу</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+    font-family: 'Montserrat', sans-serif;
+    background-image: url("{% static 'rsvp/background.jpg' %}");
+    background-size: cover;                 /* ← РАСТЯГИВАЕТ на весь экран */
+    background-position: center center;     /* ← центрирует */
+    background-repeat: no-repeat;           /* ← без повторов */
+    background-attachment: fixed;           /* ← не «уезжает» при скролле */
+    background-color: #e8d5c4;              /* ← запасной цвет, пока фото грузится */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #4a3f35;
+}
+
+        .card {
+            background: white;
+            max-width: 460px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(139, 90, 90, 0.12);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .photo-container {
+            width: 100%;
+            height: 320px;
+            background: #e8d5c4;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;         /* ← ЗАПОЛНЯЕТ контейнер без искажения */
+    object-position: center;   /* ← центрирует фото */
+    display: block;
+
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b89b8c;
+            font-size: 15px;
+            background: linear-gradient(45deg, #f0e0d4, #e8d5c4);
+        }
+
+        .content {
+            padding: 40px 32px 48px;
+        }
+
+        .invite-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 15px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #b76e79;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #3d3229;
+        }
+
+        .ampersand {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #b76e79;
+            margin: 4px 0;
+        }
+
+        .date-place {
+            margin: 24px 0 32px;
+            font-size: 15px;
+            color: #6b5b4f;
+            line-height: 1.6;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: #d4c4b5;
+            margin: 0 auto 32px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #6b5b4f;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e5d9cf;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #fdfbf9;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #b76e79;
+            background: white;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 1px solid #e5d9cf;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fdfbf9;
+        }
+
+        .radio-option:hover {
+            border-color: #b76e79;
+            background: #fdf6f4;
+        }
+
+        .radio-option input {
+            accent-color: #b76e79;
+            width: 18px;
+            height: 18px;
+        }
+
+        button {
+            background: #b76e79;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-family: inherit;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #a05d68;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .thank-you {
+            padding: 20px 0;
+        }
+
+        .thank-you .emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .thank-you h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            margin-bottom: 12px;
+            color: #3d3229;
+        }
+
+        .thank-you p {
+            color: #6b5b4f;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .errorlist {
+            list-style: none;
+            color: #c62828;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- Фото -->
+        <div class="photo-container">
+            <div class="photo-placeholder">
+            <img src="{% static 'rsvp/photo.jpg' %}" alt="Фото">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="invite-text">Приглашение на свадьбу</div>
+
+            <h1>Сергей</h1>
+            <div class="ampersand">&</div>
+            <h1>Диана</h1>
+
+            <div class="date-place">
+                30 августа 2027<br>
+                Ресторан «Миллиниал»<br>
+                г. Жуковский<br>
+                Дресс-код - постельные тона
+            </div>
+
+            <div class="divider"></div>
+
+            {% if success %}
+    <div class="thank-you">
+        <div class="emoji">💌</div>
+        {% if attending %}
+            <h2>Спасибо!</h2>
+            <p>
+                Ваш ответ успешно сохранён.<br>
+                Мы очень рады, что вы будете с нами!
+            </p>
+        {% else %}
+            <h2>Спасибо за ответ</h2>
+            <p>
+                Жаль, что вы не сможете присутствовать.<br>
+                Мы всё равно будем рады вашей поддержке!
+            </p>
+        {% endif %}
+    </div>
+{% else %}
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        {{ form.name }}
+                        {{ form.name.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>{{ form.attending.label }}</label>
+                        <div class="radio-group">
+                            {% for radio in form.attending %}
+                                <label class="radio-option">
+                                    {{ radio.tag }}
+                                    <span>{{ radio.choice_label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        {{ form.attending.errors }}
+                    </div>
+
+                    <button type="submit">Подтвердить</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
