@@ -4,6 +4,8 @@ class RSVP(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Имя")
     attending = models.BooleanField(verbose_name="Придёт")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Время ответа")
+    coming_alone = models.BooleanField(verbose_name="Придёт один/одна")
+    has_companion = models.BooleanField(verbose_name="Будет сопровождающий")
 
     class Meta:
         verbose_name = "Ответ"

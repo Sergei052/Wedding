@@ -8,10 +8,22 @@ class RSVPForm(forms.ModelForm):
         coerce=lambda x: x == 'True',
         label='Вы будете на свадьбе?'
     )
+    coming_alone = forms.TypedChoiceField(
+        choices=[(True, 'Да'), (False, 'Нет')],
+        widget=forms.RadioSelect,
+        coerce=lambda x: x == 'True',
+        label='Вы придёте один/одна?'
+    )
 
+    has_companion = forms.TypedChoiceField(
+        choices=[(True, 'Да'), (False, 'Нет')],
+        widget=forms.RadioSelect,
+        coerce=lambda x: x == 'True',
+        label='С вами будет сопровождающий?'
+    )
     class Meta:
         model = RSVP
-        fields = ['name', 'attending']
+        fields = ['name', 'attending', 'coming_alone', 'has_companion']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-input',

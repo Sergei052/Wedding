@@ -1,286 +1,334 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Приглашение на свадьбу</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#e9e1ea">
+    <title>Сергей и Диана — приглашение на свадьбу</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --ink: #3b2f3a;
+            --ink-soft: #7a6b77;
+            --mauve: #a5778a;
+            --mauve-deep: #8d6074;
+            --line: rgba(59, 47, 58, .14);
+            --paper: rgba(255, 255, 255, .78);
+            --field: rgba(255, 255, 255, .9);
+            --error: #b3261e;
         }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { -webkit-text-size-adjust: 100%; }
 
         body {
-    font-family: 'Montserrat', sans-serif;
-    background-image: url("{% static 'rsvp/background.jpg' %}");
-    background-size: cover;                 /* ← РАСТЯГИВАЕТ на весь экран */
-    background-position: center center;     /* ← центрирует */
-    background-repeat: no-repeat;           /* ← без повторов */
-    background-attachment: fixed;           /* ← не «уезжает» при скролле */
-    background-color: #e8d5c4;              /* ← запасной цвет, пока фото грузится */
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    color: #4a3f35;
-}
-
-        .card {
-            background: white;
-            max-width: 460px;
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(139, 90, 90, 0.12);
-            overflow: hidden;
-            text-align: center;
-        }
-
-        .photo-container {
-            width: 100%;
-            height: 320px;
-            background: #e8d5c4;
-            position: relative;
-            overflow: hidden;
+            font-family: 'Manrope', system-ui, sans-serif;
+            color: var(--ink);
+            background: #e9e1ea;
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
-            align-items: center;
             justify-content: center;
-
-        }
-
-        .photo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;         /* ← ЗАПОЛНЯЕТ контейнер без искажения */
-    object-position: center;   /* ← центрирует фото */
-    display: block;
-
-        }
-
-        .photo-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #b89b8c;
-            font-size: 15px;
-            background: linear-gradient(45deg, #f0e0d4, #e8d5c4);
-        }
-
-        .content {
-            padding: 40px 32px 48px;
-        }
-
-        .invite-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 15px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: #b76e79;
-            margin-bottom: 12px;
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: #3d3229;
-        }
-
-        .ampersand {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            color: #b76e79;
-            margin: 4px 0;
-        }
-
-        .date-place {
-            margin: 24px 0 32px;
-            font-size: 15px;
-            color: #6b5b4f;
+            align-items: flex-start;
+            padding: max(20px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
             line-height: 1.6;
         }
 
-        .divider {
-            width: 60px;
-            height: 1px;
-            background: #d4c4b5;
-            margin: 0 auto 32px;
+        /* Фон вынесен в псевдоэлемент: background-attachment: fixed на iPhone не работает */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                linear-gradient(160deg, rgba(233, 225, 234, .55), rgba(232, 207, 208, .45)),
+                url("{% static 'rsvp/background.jpg' %}") center / cover no-repeat,
+                linear-gradient(160deg, #e9e1ea, #ecd5d6 55%, #cfd8cd);
         }
 
-        .form-group {
-            margin-bottom: 22px;
+        .card {
+            width: 100%;
+            max-width: 440px;
+            margin: auto;
+            background: var(--paper);
+            -webkit-backdrop-filter: blur(22px) saturate(1.2);
+            backdrop-filter: blur(22px) saturate(1.2);
+            border: 1px solid rgba(255, 255, 255, .7);
+            border-radius: 32px;
+            box-shadow: 0 30px 80px -20px rgba(90, 60, 80, .35);
+            padding: 14px 14px 36px;
+            animation: rise .9s cubic-bezier(.2, .7, .2, 1) both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        /* Фото-арка */
+        .arch {
+            width: 100%;
+            aspect-ratio: 4 / 4.6;
+            border-radius: 999px 999px 22px 22px;
+            overflow: hidden;
+            background: linear-gradient(160deg, #ecd5d6, #cfd8cd);
+        }
+        .arch img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; display: block; }
+
+        .content { padding: 0 20px; text-align: center; }
+
+        .names {
+            margin-top: 34px;
+            position: relative;
+            font-family: 'Cormorant', serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: clamp(44px, 14vw, 64px);
+            line-height: .95;
+            letter-spacing: -.01em;
+            color: var(--ink);
+            text-shadow: none;
+        }
+        .names span { display: block; }
+        .names .amp {
+            font-size: .6em;
+            color: var(--mauve);
+            font-weight: 400;
+            margin: 2px 0 0;
+            line-height: 1;
+        }
+
+        .lead {
+            margin-top: 22px;
+            font-size: 15px;
+            color: var(--ink-soft);
+            max-width: 30ch;
+            margin-inline: auto;
+        }
+
+        .countdown {
+            margin: 22px auto 0;
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(165, 119, 138, .12);
+            color: var(--mauve-deep);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .details {
+            margin: 28px 0 30px;
+            border-top: 1px solid var(--line);
             text-align: left;
         }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            margin-bottom: 8px;
-            color: #6b5b4f;
+        .row {
+            display: grid;
+            grid-template-columns: 92px 1fr;
+            gap: 14px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--line);
+            font-size: 15px;
         }
+        .row dt { color: var(--ink-soft); font-size: 13px; padding-top: 2px; }
+        .row dd { font-weight: 500; }
+        .row dd small { display: block; font-weight: 400; color: var(--ink-soft); font-size: 14px; }
+
+        .map-link {
+            display: inline-block;
+            margin-top: 6px;
+            color: var(--mauve-deep);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: rgba(141, 96, 116, .4);
+        }
+
+        .swatches { display: flex; gap: 8px; margin-top: 10px; }
+        .swatches i {
+            width: 26px; height: 26px; border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px var(--line);
+        }
+
+        /* Форма */
+        .ask { font-family: 'Cormorant', serif; font-size: 26px; font-weight: 500; margin-bottom: 18px; }
+
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; overflow: hidden;
+            clip: rect(0 0 0 0); white-space: nowrap;
+        }
+
+        .form-group { margin-bottom: 14px; text-align: left; }
 
         .form-input {
             width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #e5d9cf;
-            border-radius: 10px;
-            font-size: 15px;
-            font-family: inherit;
-            transition: border-color 0.2s;
-            background: #fdfbf9;
+            padding: 16px 18px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            font: inherit;
+            font-size: 16px; /* меньше 16px — iPhone приближает страницу при вводе */
+            color: var(--ink);
+            background: var(--field);
+            transition: border-color .2s, box-shadow .2s;
         }
-
+        .form-input::placeholder { color: #a99ca6; }
         .form-input:focus {
             outline: none;
-            border-color: #b76e79;
-            background: white;
+            border-color: var(--mauve);
+            box-shadow: 0 0 0 4px rgba(165, 119, 138, .18);
         }
 
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .radio-group { display: grid; gap: 10px; }
+        .choice { position: relative; display: block; cursor: pointer; }
+        .choice input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; cursor: pointer; margin: 0; }
+        .choice span {
+            display: flex; align-items: center; gap: 12px;
+            padding: 16px 18px;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: var(--field);
+            font-size: 15px;
+            transition: border-color .2s, background .2s, color .2s;
         }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            border: 1px solid #e5d9cf;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #fdfbf9;
+        .choice span::before {
+            content: "";
+            flex: none;
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 1.5px solid #bfb0ba;
+            background: #fff;
+            transition: all .2s;
         }
-
-        .radio-option:hover {
-            border-color: #b76e79;
-            background: #fdf6f4;
+        .choice input:checked + span {
+            border-color: var(--mauve);
+            background: #fff;
+            color: var(--ink);
+            font-weight: 500;
         }
-
-        .radio-option input {
-            accent-color: #b76e79;
-            width: 18px;
-            height: 18px;
+        .choice input:checked + span::before {
+            border-color: var(--mauve);
+            background: var(--mauve);
+            box-shadow: inset 0 0 0 4px #fff;
         }
+        .choice input:focus-visible + span { outline: 3px solid rgba(165, 119, 138, .45); outline-offset: 2px; }
 
         button {
-            background: #b76e79;
-            color: white;
-            border: none;
-            padding: 16px;
-            font-size: 15px;
-            border-radius: 10px;
-            cursor: pointer;
             width: 100%;
-            font-family: inherit;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: background 0.2s, transform 0.1s;
             margin-top: 8px;
+            padding: 17px;
+            border: 0;
+            border-radius: 16px;
+            font: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            background: linear-gradient(135deg, #b98598, #8d6074);
+            box-shadow: 0 14px 30px -12px rgba(141, 96, 116, .75);
+            transition: transform .15s, box-shadow .2s;
+        }
+        button:hover { box-shadow: 0 18px 34px -12px rgba(141, 96, 116, .85); }
+        button:active { transform: scale(.98); }
+        button:focus-visible { outline: 3px solid rgba(165, 119, 138, .55); outline-offset: 3px; }
+
+        .errorlist { list-style: none; color: var(--error); font-size: 13px; margin-top: 8px; padding-left: 4px; }
+
+        /* Ответ принят */
+        .thanks { padding: 6px 0 0; animation: rise .6s ease both; }
+        .thanks svg { width: 54px; height: 54px; margin-bottom: 14px; color: var(--mauve); }
+        .thanks h2 { font-family: 'Cormorant', serif; font-size: 34px; font-weight: 500; margin-bottom: 8px; }
+        .thanks p { color: var(--ink-soft); font-size: 15px; }
+
+        @media (max-width: 380px) {
+            .content { padding: 0 8px; }
+            .row { grid-template-columns: 1fr; gap: 2px; }
         }
 
-        button:hover {
-            background: #a05d68;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .thank-you {
-            padding: 20px 0;
-        }
-
-        .thank-you .emoji {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .thank-you h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            margin-bottom: 12px;
-            color: #3d3229;
-        }
-
-        .thank-you p {
-            color: #6b5b4f;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .errorlist {
-            list-style: none;
-            color: #c62828;
-            font-size: 13px;
-            margin-top: 6px;
+        @media (prefers-reduced-motion: reduce) {
+            .card, .thanks { animation: none; }
+            * { transition: none !important; }
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- Фото -->
-        <div class="photo-container">
-            <div class="photo-placeholder">
-            <img src="{% static 'rsvp/photo.jpg' %}" alt="Фото">
-            </div>
+    <main class="card">
+        <div class="arch">
+            <img src="{% static 'rsvp/photo.jpg' %}" alt="Сергей и Диана" onerror="this.style.display='none'">
         </div>
 
         <div class="content">
-            <div class="invite-text">Приглашение на свадьбу</div>
+            <h1 class="names">
+                <span>Сергей</span>
+                <span class="amp">и</span>
+                <span>Диана</span>
+            </h1>
 
-            <h1>Сергей</h1>
-            <div class="ampersand">&</div>
-            <h1>Диана</h1>
+            <p class="lead">Будем счастливы разделить с вами этот день</p>
 
-            <div class="date-place">
-                30 августа 2027<br>
-                Ресторан «Миллиниал»<br>
-                г. Жуковский<br>
-                Дресс-код - постельные тона
-            </div>
+            <div class="countdown" id="countdown" hidden></div>
 
-            <div class="divider"></div>
+            <dl class="details">
+                <div class="row">
+                    <dt>Когда</dt>
+                    <dd>30 августа 2027</dd>
+                </div>
+                <div class="row">
+                    <dt>Где</dt>
+                    <dd>
+                        Ресторан «Миллиниал»
+                        <small>г. Жуковский</small>
+                        <a class="map-link" target="_blank" rel="noopener"
+                           href="https://yandex.ru/maps/?text=%D0%A0%D0%B5%D1%81%D1%82%D0%BE%D1%80%D0%B0%D0%BD%20%D0%9C%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B8%D0%B0%D0%BB%20%D0%96%D1%83%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%B8%D0%B9">Открыть на карте</a>
+                    </dd>
+                </div>
+                <div class="row">
+                    <dt>Дресс-код</dt>
+                    <dd>
+                        Постельные тона
+                        <span class="swatches" aria-hidden="true">
+                            <i style="background:#f1dcdc"></i>
+                            <i style="background:#e6dcec"></i>
+                            <i style="background:#d6e0d3"></i>
+                            <i style="background:#f3ead9"></i>
+                            <i style="background:#d9e3ee"></i>
+                        </span>
+                    </dd>
+                </div>
+            </dl>
 
             {% if success %}
-    <div class="thank-you">
-        <div class="emoji">💌</div>
-        {% if attending %}
-            <h2>Спасибо!</h2>
-            <p>
-                Ваш ответ успешно сохранён.<br>
-                Мы очень рады, что вы будете с нами!
-            </p>
-        {% else %}
-            <h2>Спасибо за ответ</h2>
-            <p>
-                Жаль, что вы не сможете присутствовать.<br>
-                Мы всё равно будем рады вашей поддержке!
-            </p>
-        {% endif %}
-    </div>
-{% else %}
+                <div class="thanks">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.7a4.3 4.3 0 0 1 7.5 2.6c0 5.6-7.5 10.2-7.5 10.2z"/>
+                    </svg>
+                    {% if attending %}
+                        <h2>Спасибо, ждём вас!</h2>
+                        <p>Мы очень рады, что вы будете с нами.</p>
+                    {% else %}
+                        <h2>Спасибо за ответ</h2>
+                        <p>Жаль, что вы не сможете приехать.<br>Мы будем рады вашей поддержке.</p>
+                    {% endif %}
+                </div>
+            {% else %}
+                <h2 class="ask">Ответьте на несколько вопросов... </h2>
                 <form method="post" novalidate>
                     {% csrf_token %}
 
                     <div class="form-group">
+                        <label class="sr-only" for="{{ form.name.id_for_label }}">Ваше имя ..</label>
                         {{ form.name }}
                         {{ form.name.errors }}
                     </div>
 
                     <div class="form-group">
-                        <label>{{ form.attending.label }}</label>
-                        <div class="radio-group">
+                        <div class="radio-group" role="radiogroup" aria-label="{{ form.attending.label }}">
                             {% for radio in form.attending %}
-                                <label class="radio-option">
+                                <label class="choice">
                                     {{ radio.tag }}
                                     <span>{{ radio.choice_label }}</span>
                                 </label>
@@ -289,10 +337,52 @@
                         {{ form.attending.errors }}
                     </div>
 
-                    <button type="submit">Подтвердить</button>
+                    <div class="form-group">
+    <p>{{ form.coming_alone.label }}</p>
+    <div class="radio-group" role="radiogroup" aria-label="{{ form.coming_alone.label }}">
+        {% for radio in form.coming_alone %}
+            <label class="choice">
+                {{ radio.tag }}
+                <span>{{ radio.choice_label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+    {{ form.coming_alone.errors }}
+</div>
+
+<div class="form-group">
+    <p>{{ form.has_companion.label }}</p>
+    <div class="radio-group" role="radiogroup" aria-label="{{ form.has_companion.label }}">
+        {% for radio in form.has_companion %}
+            <label class="choice">
+                {{ radio.tag }}
+                <span>{{ radio.choice_label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+    {{ form.has_companion.errors }}
+</div>
+
+                    <button type="submit">Отправить ответ</button>
                 </form>
             {% endif %}
         </div>
-    </div>
+    </main>
+
+    <script>
+        (function () {
+            var el = document.getElementById('countdown');
+            var target = new Date('2027-08-30T00:00:00+03:00');
+            var days = Math.ceil((target - new Date()) / 86400000);
+            if (days <= 0) return;
+            var n = days % 100, d = days % 10, word;
+            if (n > 10 && n < 15) word = 'дней';
+            else if (d === 1) word = 'день';
+            else if (d > 1 && d < 5) word = 'дня';
+            else word = 'дней';
+            el.textContent = 'До праздника ' + days + ' ' + word;
+            el.hidden = false;
+        })();
+    </script>
 </body>
 </html>
